@@ -102,11 +102,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # SECURITY WARNING: keep the database PASSWORD used in production secret!
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'mssql',
         'NAME': 'mynext4',
-        'USER': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'Wesley',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
     }
 }
 

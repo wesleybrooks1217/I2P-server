@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="college",
             name="collegeAIKey",
-            field=models.IntegerField(blank=True, default="", null=True),
+            field=models.IntegerField(blank=True, default=0, null=True),
         ),
         migrations.AlterField(
             model_name="college",
