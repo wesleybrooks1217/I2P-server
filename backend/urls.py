@@ -55,12 +55,16 @@ urlpatterns = [
     path('api/search/career/<str:chars>/', CareersView.CareerViews.career_serach),
     path('load_careers', CareersView.CareerViews.load_careers),
     path('api/users/careerlist/<int:user_id>/', CareerFeedbackViews.CareerFeedbackViews.get_liked_careers),
-    path('api/explore/career/', CareersView.CareerViews.career_filter),
+    #path('api/explore/career/', CareersView.CareerViews.career_filter),
     path('api/users/careerlist/add/', CareerFeedbackViews.CareerFeedbackViews.add_career_feedback),
     path('user_simulate/new_user', userAccountView.create_fake_users),
     path('api/explore/career/industry/<str:industryIn>/', CareersView.CareerViews.career_filter_industry),
     path('api/explore/career/salary/<int:salaryIn>/', CareersView.CareerViews.career_filter_salary),
     path('api/explore/career/education/<str:education>/', CareersView.CareerViews.career_filter_education),
+    path('api/explore/career/', CareersView.CareerViews.as_view(), name='get'),
+    path('api/user/career/filters/', CareersView.CareerViews.as_view(), name='career_list'),
+    path('api/user/career/liked/<int:user_id>', CareersView.CareerViews.as_view(), name='liked_careers'),
+    path('api/user/career/display-data/<int:onet_id>', CareersView.CareerViews.as_view(), name='get_data_for_user_display')
     # path('api/career/recommendations/<int:user_id>/', recommendedCareersViews.RecommendedCareersViews.getRecommendedCareers)
     
 ]

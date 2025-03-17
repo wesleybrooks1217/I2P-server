@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from .models import  Career
 import urllib.request, urllib.parse, urllib.error
@@ -6,13 +6,15 @@ import urllib.request, urllib.error, urllib.parse
 import base64
 import json
 from django.http import HttpResponse, JsonResponse
+from django.views import View
 from courses import models as CoursesMod
 import csv
+from django.db.models import Q 
 
 # Create your views here.
 
 
-class CareerViews():
+class CareerViews(View):
 
     def call_onet(request, onet_id):
         headers = {
@@ -21,7 +23,70 @@ class CareerViews():
             'Accept': 'application/json' 
                         }
         
-        url = "https://services.onetcenter.org/ws/mnm/careers/" + str(onet_id) + "/report"
+        url = "https://services.onetcenter.org/ws/mnm/careers/"
+
+        req = urllib.request.Request(url, None, headers)
+        handle = urllib.request.urlopen(req) 
+        return JsonResponse(json.load(handle))
+
+    def get(self, request, *args, **kwargs):
+
+        careers = Career.objects.all()
+        
+        search_query = request.GET.get('search', None)
+        if search_query:
+            careers = careers.filter(career_name_icontains=search_query)
+        
+        salary_query = request.GET.get('salary', None)
+        if salary_query:
+            careers = careers.filter(median_salary_gte=salary_query)
+
+        education_query = request.GET.get('education', None)
+        if education_query:
+            careers = careers.filter(education=education_query)
+
+        industry_query = request.GET.get('industry', None)
+        if industry_query:
+            careers = careers.filter(industry=industry_query)
+        
+        career_list = list(careers.values('id', 'career_name', 'onet_id', 'median_salary', 'industry', 'education'))
+
+        return JsonResponse({'list': career_list})
+
+    def career_list(request):
+        query = request.GET.get('q', '')
+        median_salary = request.GET.get('median_salary')
+        industry = request.GET.get('industry')
+        education = request.GET.get('education')
+
+        careers = Career.objects.all()
+
+        if query:
+            careers = careers.filter(Q(career_name_icontains=query))
+        if median_salary:
+            careers = careers.filter(median_salary_gte=median_salary)
+        if industry:
+            careers = careers.filter(industry=industry)
+        if education:
+            careers = careers.filter(education=education)
+
+        career_list = list(careers.values('id', 'career_name', 'onet_id'))
+        return JsonResponse({'list': career_list})
+
+    def liked_careers(request):
+        user = request.user
+        liked = user.likedCareers.all()
+        career_list = list(liked.values('id', 'career_name', 'onet_id'))
+        return JsonResponse({'list': career_list})
+
+    def get_data_for_user_display(request, onet_id):
+        headers = {
+            'User-Agent': 'python-OnetWebService/1.00 (bot)',
+            'Authorization': 'Basic ' + base64.standard_b64encode(("linkedin_company_myn" + ':' + "5725apz").encode()).decode(),
+            'Accept': 'application/json' 
+                        }
+        
+        url = "https://services.onetcenter.org/ws/mnm/careers/"
 
         req = urllib.request.Request(url, None, headers)
         handle = urllib.request.urlopen(req) 
