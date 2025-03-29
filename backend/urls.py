@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 
 from college import views as collegeView
 from Careers import views as CareersView
+from courses import views as CoursesView
 from duelEnrollmentCourses import views as duelEnrollmentCoursesView
 from State import views as stateView
 from School import views as schoolView
@@ -52,21 +53,26 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('api/survey/', include('CareerSurveyOne.urls')),
     path('api/career/<str:onet_id>/', CareersView.CareerViews.call_onet),
-    path('api/search/career/<str:chars>/', CareersView.CareerViews.career_serach),
-    path('load_careers', CareersView.CareerViews.load_careers),
     path('api/users/careerlist/<int:user_id>/', CareerFeedbackViews.CareerFeedbackViews.get_liked_careers),
     #path('api/explore/career/', CareersView.CareerViews.career_filter),
     path('api/users/careerlist/add/', CareerFeedbackViews.CareerFeedbackViews.add_career_feedback),
     path('user_simulate/new_user', userAccountView.create_fake_users),
-    path('api/explore/career/industry/<str:industryIn>/', CareersView.CareerViews.career_filter_industry),
-    path('api/explore/career/salary/<int:salaryIn>/', CareersView.CareerViews.career_filter_salary),
-    path('api/explore/career/education/<str:education>/', CareersView.CareerViews.career_filter_education),
     path('api/explore/career/', CareersView.CareerViews.career_list, name='career_list'),
     path('api/user/career/filters/', CareersView.CareerViews.career_list, name='career_list'),
     path('api/user/career/liked/', CareersView.CareerViews.liked_careers, name='liked_careers'),
     path('api/user/career/display-data/<str:onet_id>', CareersView.CareerViews.get_data_for_user_display, name='get_data_for_user_display'),
     path('api/user/career/liked/add', CareersView.CareerViews.add_liked_career, name="add_liked_career"),
-    path('api/user/career/liked/remove', CareersView.CareerViews.remove_liked_career, name="remove_liked_career")
+    path('api/user/career/liked/remove', CareersView.CareerViews.remove_liked_career, name="remove_liked_career"),
+    path('api/user/college/filters/', collegeView.CollegeView.college_list, name='college_list'),
+    path('api/user/college/liked/', collegeView.CollegeView.liked_colleges, name='liked_colleges'),
+    path('api/user/college/display-data/<str:id>', collegeView.CollegeView.get_data_for_user_display, name='get_data_for_user_display'),
+    path('api/user/college/liked/add', collegeView.CollegeView.add_liked_college, name='add_liked_college'),
+    path('api/user/college/liked/remove', collegeView.CollegeView.remove_liked_college, name='remove_liked_college'),
+    path('api/user/course/filters/', CoursesView.CoursesView.course_list, name='course_list'),
+    path('api/user/course/liked/', CoursesView.CoursesView.liked_course, name='liked_course'),
+    path('api/user/course/display-data/<str:id>', CoursesView.CoursesView.get_data_for_user_display, name='get_data_for_user_display'),
+    path('api/user/course/liked/add', CoursesView.CoursesView.add_liked_course, name='add_liked_course'),
+    path('api/user/course/liked/remove', CoursesView.CoursesView.remove_liked_course, name='remove_liked_course')
     # path('api/career/recommendations/<int:user_id>/', recommendedCareersViews.RecommendedCareersViews.getRecommendedCareers)
     
 ]

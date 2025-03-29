@@ -32,11 +32,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name="college",
-            name="collegeAIKey",
-            field=models.IntegerField(blank=True, default=0, null=True),
-        ),
-        migrations.AlterField(
-            model_name="college",
             name="name",
             field=models.CharField(blank=True, default="", max_length=120),
         ),

@@ -23,7 +23,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("name", models.CharField(max_length=120)),
-                ("collegeAIKey", models.IntegerField(null=True)),
             ],
         ),
     ]
